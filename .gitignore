@@ -1,0 +1,22 @@
+# .gitignore
+
+# Node modules and environment
+node_modules/
+.env
+
+# Logs
+logs
+*.log
+
+# System files
+.DS_Store
+.vscode/
+.idea/
+
+PORT=
+BOT_PUBLIC_KEY=
+API_KEY=
+BLOCKONOMICS_API_KEY=
+USER_BTC_60=
+USER_BTC_20=
+RESERVE_BTC_20=
