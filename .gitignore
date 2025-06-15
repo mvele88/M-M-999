@@ -1,0 +1,13 @@
+# Node modules and environment
+node_modules/
+.env
+firebase-key.json # THIS LINE MUST BE PRESENT!
+
+# Logs
+logs/
+*.log
+
+# System files
+.DS_Store
+.vscode/
+.idea/
