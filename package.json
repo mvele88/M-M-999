@@ -1,0 +1,19 @@
+{
+  "name": "m-m-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.2",
+    "axios": "^1.6.8",   // Added/Updated
+    "body-parser": "^1.20.2", // Added/Updated
+    "cors": "^2.8.5",     // Added/Updated
+    "dotenv": "^16.5.0",
+    "express": "^4.19.2"  // Added/Updated
+    // You can remove "bip39", "bs58", "ed25519-hd-key" if they are not directly used in index.js for other purposes.
+    // They were likely added by the `npm init` process or a specific previous command.
+    // However, keeping them won't break anything, just makes the package a bit larger.
+  }
+}
