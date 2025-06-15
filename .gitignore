@@ -1,0 +1,23 @@
+# Node modules and environment
+node_modules/
+.env
+
+# Logs
+logs/
+*.log
+
+# System files
+.DS_Store
+.vscode/
+.idea/
+
+PORT=
+BOT_PRIVATE_KEY_JSON=
+SOLANA_RPC_URL=
+API_KEY=
+BLOCKONOMICS_API_KEY=
+USER_BTC_60=
+USER_BTC_20=
+RESERVE_BTC_20=
+
+
