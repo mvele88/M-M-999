@@ -1,0 +1,14 @@
+
+
+# Node modules and environment
+node_modules/
+.env  # This line tells Git to ignore your .env file which contains all your variables.
+
+# Logs
+logs/
+*.log
+
+# System files
+.DS_Store
+.vscode/
+.idea/
