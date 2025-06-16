@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "m-m-backend",
   "version": "1.0.0",
@@ -15,4 +16,23 @@
     "firebase": "^10.12.2",
     "firebase-admin": "^12.1.1"
   }
+=======
+{
+  "name": "m-m-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.2",
+    "axios": "^1.6.8",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.19.2",
+    "firebase": "^10.12.2",
+    "firebase-admin": "^12.1.1"
+  }
+>>>>>>> 9168e7e (Initial commit of local backend project files, including index.js)
 }

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>M & M A.I. PLATFORM</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #0a0f1f, #000);
+      font-family: 'Inter', sans-serif;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: #00f2ff;
+      text-shadow: 0 0 10px #00f2ff;
+    }
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 1rem;
+      gap: 1rem;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      margin: 0;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(45deg, #00f2ff, #00c6ff);
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    button:disabled {
+      background: #444;
+      box-shadow: none;
+      cursor: not-allowed;
+      color: #bbb;
+    }
+    button:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 5px 25px rgba(0, 242, 255, 0.8);
+    }
+    .balance-section {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1.5rem 2rem;
+      border-radius: 15px;
+      margin-top: 2rem;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 0 30px rgba(0, 242, 255, 0.3);
+      text-align: left;
+    }
+    .balance-item {
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .balance-item span {
+      font-weight: bold;
+      color: #00f2ff;
+    }
+    .status {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: #0ff;
+      min-height: 24px;
+    }
+    .loading-spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #00f2ff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* SweetAlert customizations */
+    .swal2-popup {
+        background: #1a1a2e !important;
+        color: white !important;
+        border-radius: 15px !important;
+        box-shadow: 0 0 30px rgba(0, 242, 255, 0.5) !important;
+    }
+    .swal2-title {
+        color: #00f2ff !important;
+    }
+    .swal2-html-container {
+        color: #ddd !important;
+    }
+    .swal2-input {
+        background: #0d0d1f !important;
+        color: white !important;
+        border: 1px solid #00c6ff !important;
+        border-radius: 8px !important;
+        margin-bottom: 10px !important;
+    }
+    .swal2-confirm, .swal2-cancel {
+        background-color: #00f2ff !important;
+        color: #000 !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        transition: transform 0.1s ease-in-out !important;
+    }
+    .swal2-confirm:hover, .swal2-cancel:hover {
+        transform: translateY(-2px) !important;
+    }
+    .swal2-html-container ul {
+        list-style-type: none; /* Remove bullet points */
+        padding-left: 0;
+    }
+    .swal2-html-container li {
+        margin-bottom: 5px;
+    }
+
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      button {
+        width: calc(50% - 1rem);
+      }
+      .balance-section {
+        width: 95%;
+        padding: 1rem;
+      }
+      .balance-item {
+        font-size: 1rem;
+      }
+    }
+    @media (max-width: 480px) {
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>M & M A.I. PLATFORM</h1>
+
+  <div class="button-container">
+    <button id="connectBtn"><i class="fab fa-solana"></i> Connect Phantom</button>
+    <button id="reportProfitBtn"><i class="fas fa-hand-holding-usd"></i> Report Profit</button>
+    <button id="processMonthlyBtn"><i class="fas fa-calendar-alt"></i> Process Monthly Payout</button>
+    <button id="withdrawBtcBtn"><i class="fab fa-btc"></i> Manual BTC Withdraw</button>
+  </div>
+
+  <div class="status" id="statusMsg"></div>
+
+  <div class="balance-section">
+    <h2>Wallet Balances & Tracking</h2>
+    <div class="balance-item"><i class="fab fa-solana" style="color: #00f2ff;"></i> Phantom Wallet (User): <span id="phantomBalance">Loading...</span></div>
+    <div class="balance-item"><i class="fab fa-solana" style="color: #00f2ff;"></i> Sniping/Fees Wallet: <span id="snipingFeesBalance">Loading...</span></div>
+    <div class="balance-item"><i class="fab fa-solana" style="color: #00f2ff;"></i> Bot/Compounding Wallet: <span id="botCompoundingBalance">Loading...</span></div>
+    <div class="balance-item"><i class="fab fa-btc" style="color: #F7931A;"></i> BTC Payout Balance: <span id="btcPayoutBalance">Loading...</span></div>
+    <hr style="border-color: rgba(255,255,255,0.2); margin: 1rem 0;">
+    <div class="balance-item"><i class="fas fa-database" style="color: #4285F4;"></i> Recorded Total Profit (SOL): <span id="recordedTotalProfit">Loading...</span></div>
+    <div class="balance-item"><i class="fas fa-chart-line" style="color: #34A853;"></i> Monthly Processed (Last): <span id="lastMonthlyProcess">Loading...</span></div>
+  </div>
+
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    let provider;
+    const connectBtn = document.getElementById("connectBtn");
+    const reportProfitBtn = document.getElementById("reportProfitBtn");
+    const processMonthlyBtn = document.getElementById("processMonthlyBtn");
+    const withdrawBtcBtn = document.getElementById("withdrawBtcBtn");
+    const statusMsg = document.getElementById("statusMsg");
+
+    const phantomBalanceSpan = document.getElementById("phantomBalance");
+    const snipingFeesBalanceSpan = document.getElementById("snipingFeesBalance");
+    const botCompoundingBalanceSpan = document.getElementById("botCompoundingBalance"); // Corrected: Removed duplicate assignment
+    const btcPayoutBalanceSpan = document.getElementById("btcPayoutBalance");
+    const recordedTotalProfitSpan = document.getElementById("recordedTotalProfit");
+    const lastMonthlyProcessSpan = document.getElementById("lastMonthlyProcess");
+
+    // Replace this placeholder with YOUR ACTUAL BACKEND DEPLOYMENT URL from Vercel
+    const BACKEND_URL = "m-m-8080-backend.vercel.app"; // <<< IMPORTANT: Update this line
+
+    const showLoading = (message) => {
+        statusMsg.innerHTML = `${message} <div class="loading-spinner"></div>`;
+    };
+
+    const updateStatus = (msg, isError = false) => {
+      statusMsg.textContent = msg;
+      statusMsg.style.color = isError ? '#ff4d4d' : '#00f2ff';
+    };
+
+    const getSOLPriceUSD = async () => {
+      try {
+        const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
+        const data = await res.json();
+        return data.solana.usd;
+      } catch (e) {
+        console.error("Error fetching SOL price from Coingecko:", e);
+        return 150; // fallback estimate if Coingecko fails
+      }
+    };
+
+    // Helper function to fetch JSON or text for error debugging
+    async function fetchJsonResponse(url) {
+        const response = await fetch(url);
+        if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(`HTTP Error: ${response.status} ${response.statusText} - Body: ${errorBody.substring(0, 500)}`);
+        }
+        return response.json();
+    }
+
+
+    // Function to fetch and display all balances and tracking data
+    const fetchAndDisplayBalances = async () => {
+      showLoading("Fetching balances and tracking data...");
+      try {
+        // Fetch Phantom Wallet Balance (direct Solana Web3 call)
+        if (provider && provider.publicKey) {
+          const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"), "confirmed");
+          const balance = await connection.getBalance(provider.publicKey);
+          const sol = balance / 1e9;
+          const price = await getSOLPriceUSD();
+          const usd = sol * price;
+          phantomBalanceSpan.textContent = `${sol.toFixed(4)} SOL (~$${usd.toFixed(2)})`;
+        } else {
+          phantomBalanceSpan.textContent = "N/A (Connect Phantom)";
+        }
+
+        // Fetch Sniping/Fees Wallet Balance (from backend)
+        try {
+            const snipingFeesData = await fetchJsonResponse(`${BACKEND_URL}/sol-sniping-balance`);
+            const price = await getSOLPriceUSD();
+            const usd = snipingFeesData.balance * price;
+            snipingFeesBalanceSpan.textContent = `${snipingFeesData.balance.toFixed(4)} SOL (~$${usd.toFixed(2)})`;
+        } catch (error) {
+            console.error("Error fetching sniping/fees balance:", error);
+            snipingFeesBalanceSpan.textContent = `Error: ${error.message}`;
+        }
+
+        // Fetch Bot/Compounding Wallet Balance (from backend)
+        try {
+            const botCompoundingData = await fetchJsonResponse(`${BACKEND_URL}/sol-bot-balance`);
+            const price = await getSOLPriceUSD();
+            const usd = botCompoundingData.balance * price;
+            botCompoundingBalanceSpan.textContent = `${botCompoundingData.balance.toFixed(4)} SOL (~$${usd.toFixed(2)})`;
+        } catch (error) {
+            console.error("Error fetching bot/compounding balance:", error);
+            botCompoundingBalanceSpan.textContent = `Error: ${error.message}`;
+        }
+
+
+        // Fetch BTC Payout Balance (from backend)
+        try {
+            const btcPayoutData = await fetchJsonResponse(`${BACKEND_URL}/btc-payout-balance`);
+            btcPayoutBalanceSpan.textContent = `${btcPayoutData.balance} BTC`;
+        } catch (error) {
+            console.error("Error fetching BTC payout balance:", error);
+            btcPayoutBalanceSpan.textContent = `Error: ${error.message}`;
+        }
+
+        // Fetch Total Recorded Profit (from backend/Firestore)
+        try {
+            const totalProfitData = await fetchJsonResponse(`${BACKEND_URL}/total-recorded-profit`);
+            const price = await getSOLPriceUSD();
+            const usd = totalProfitData.totalSolProfit * price;
+            recordedTotalProfitSpan.textContent = `${totalProfitData.totalSolProfit.toFixed(4)} SOL (~$${usd.toFixed(2)})`;
+        } catch (error) {
+            console.error("Error fetching total recorded profit:", error);
+            recordedTotalProfitSpan.textContent = `Error: ${error.message}`;
+        }
+
+
+        // Fetch Last Monthly Processed Date (from backend/Firestore)
+        try {
+            const lastMonthlyData = await fetchJsonResponse(`${BACKEND_URL}/last-monthly-process`);
+            lastMonthlyProcessSpan.textContent = lastMonthlyData.lastProcessedMonth || "N/A";
+        } catch (error) {
+            console.error("Error fetching last monthly process date:", error);
+            lastMonthlyProcessSpan.textContent = `Error: ${error.message}`;
+        }
+
+
+        updateStatus("Balances and tracking data updated successfully.");
+
+      } catch (e) {
+        console.error("Failed to fetch all balances and tracking data:", e);
+        updateStatus("Failed to update all balances. Check console for details.", true);
+      }
+    };
+
+    // --- Event Listeners ---
+
+    window.onload = async () => {
+      if ("solana" in window && window.solana.isPhantom) {
+        provider = window.solana;
+        try {
+          await provider.connect({ onlyIfTrusted: true });
+          connectBtn.innerText = "Phantom Connected";
+          connectBtn.disabled = true;
+        } catch (err) {
+          console.warn("Phantom connection (onlyIfTrusted) failed or not authorized.", err);
+          updateStatus("Phantom not connected or authorization revoked.", true);
+        }
+      } else {
+        updateStatus("Phantom wallet not found. Please install it.", true);
+      }
+      await fetchAndDisplayBalances();
+    };
+
+    connectBtn.onclick = async () => {
+      try {
+        if (!provider) {
+             updateStatus("Phantom wallet not found. Please install it.", true);
+             return;
+        }
+        showLoading("Connecting Phantom...");
+        await provider.connect();
+        connectBtn.innerText = "Phantom Connected";
+        connectBtn.disabled = true;
+        await fetchAndDisplayBalances();
+      } catch (e) {
+        console.error("Phantom connection failed:", e);
+        updateStatus("Phantom connection failed.", true);
+      }
+    };
+
+    reportProfitBtn.onclick = async () => {
+        const { value: formValues } = await Swal.fire({
+            title: 'Report Actual Profit',
+            html:
+                '<input id="swal-profit-id" class="swal2-input" placeholder="Unique Profit ID (e.g., Tx Hash)">' +
+                '<input id="swal-sol-amount" class="swal2-input" type="number" step="any" placeholder="SOL Profit Amount (e.g., 0.5)">',
+            focusConfirm: false,
+            preConfirm: () => {
+                const profitId = document.getElementById('swal-profit-id').value;
+                const solAmount = parseFloat(document.getElementById('swal-sol-amount').value);
+                if (!profitId || isNaN(solAmount) || solAmount <= 0) {
+                    Swal.showValidationMessage(`Please enter a unique ID and a positive SOL amount`);
+                    return false;
+                }
+                return { profitId: profitId, solAmount: solAmount, timestamp: new Date().toISOString() };
+            }
+        });
+
+        if (formValues) {
+            showLoading("Reporting actual profit...");
+            try {
+                const res = await fetch(`${BACKEND_URL}/report-actual-profit`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formValues)
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    Swal.fire('Success!', `Profit ${data.profitId} reported!`, 'success');
+                    updateStatus(`✅ Profit ${data.profitId} reported successfully.`, false);
+                    await fetchAndDisplayBalances();
+                } else {
+                    Swal.fire('Error!', `Failed to report profit: ${data.error}`, 'error');
+                    updateStatus(`❌ Failed to report profit: ${data.error}`, true);
+                }
+            } catch (e) {
+                console.error("Error reporting profit:", e);
+                Swal.fire('Error!', 'Failed to report profit due to network error.', 'error');
+                updateStatus("❌ Failed to report profit due to network error.", true);
+            }
+        }
+    };
+
+    processMonthlyBtn.onclick = async () => {
+        const { value: month } = await Swal.fire({
+            title: 'Process Monthly Payout',
+            input: 'text',
+            inputLabel: 'Enter month to process (YYYY-MM)',
+            inputValue: new Date().toISOString().slice(0, 7), // Default to current month
+            showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value || !/^\d{4}-\d{2}$/.test(value)) {
+                    return 'Please enter a valid month in YYYY-MM format!'; // Corrected validation message
+                }
+            }
+        });
+
+        if (month) {
+            showLoading(`Processing monthly data for ${month}...`);
+            try {
+                const res = await fetch(`${BACKEND_URL}/process-monthly-data`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ month: month })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    Swal.fire('Success!', data.message, 'success');
+                    updateStatus(`✅ Monthly processing for ${month} completed.`, false);
+                    await fetchAndDisplayBalances();
+                } else {
+                    Swal.fire('Error!', `Monthly processing failed: ${data.error}`, 'error');
+                    updateStatus(`❌ Monthly processing for ${month} failed: ${data.error}`, true);
+                }
+            } catch (e) {
+                console.error("Error during monthly processing:", e);
+                Swal.fire('Error!', 'Monthly processing failed due to network error.', 'error');
+                updateStatus("❌ Monthly processing failed due to network error.", true);
+            }
+        }
+    };
+
+    // Define the BTC payout addresses for display in the manual withdrawal message
+    const userBtc60Addr = "bc1qppxphuwvrp29hju2544l2mvnjnq4nv3gvytrse";
+    const userBtc20Addr = "bc1qm9jmfya3eauq6nj4mez4cygw8ry6q3vd9gvm4g";
+    const reserveBtc20Addr = "bc1q9k79mkx82h8e8awvda5slgw9sku0lyrf5mlaek";
+
+    withdrawBtcBtn.onclick = async () => {
+        await Swal.fire({
+            title: 'Manual BTC Withdrawal Required',
+            html: `
+                <p>In this configuration, Bitcoin withdrawals are performed manually by you from your exchange account (e.g., Coinbase).</p>
+                <p>After monthly processing, SOL profits are sent to your exchange. Please log in there to convert SOL to BTC and then send BTC to your payout addresses:</p>
+                <ul>
+                    <li>60% to <code>${userBtc60Addr}</code></li>
+                    <li>20% to <code>${userBtc20Addr}</code></li>
+                    <li>20% to <code>${reserveBtc20Addr}</code></li>
+                </ul>
+                <p>Ensure you send the correct percentages to avoid issues.</p>
+            `,
+            icon: 'info',
+            confirmButtonText: 'Understood'
+        });
+    };
+  </script>
+</body>
+</html>

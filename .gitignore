@@ -1,3 +1,4 @@
+<<<<<<< HEAD
     # Node modules and environment
     node_modules/
     .env
@@ -11,4 +12,19 @@
     .DS_Store
     .vscode/
     .idea/
+=======
+    # Node modules and environment
+    node_modules/
+    .env
+    firebase-key.json # This line MUST be present!
+
+    # Logs
+    logs/
+    *.log
+
+    # System files
+    .DS_Store
+    .vscode/
+    .idea/
+>>>>>>> 9168e7e (Initial commit of local backend project files, including index.js)
     

@@ -1,0 +1,41 @@
+
+
+
+SOLANA_RPC_URL="YOUR_SOLANA_RPC_URL"
+SNIPING_FEES_PRIVATE_KEY_JSON="[your,private,key,array,for,sniping,fees,wallet]"
+BOT_COMPOUNDING_PRIVATE_KEY_JSON="[your,private,key,array,for,bot,compounding,wallet]"
+
+# --- For Blockonomics BTC Balance (Wallet Watcher) ---
+BLOCKONOMICS_API_KEY="YOUR_BLOCKONOMICS_API_KEY"
+# This is crucial for the backend to fetch REAL BTC balance.
+# You need to provide an Extended Public Key (xPub) from your Bitcoin wallet,
+# or a specific Bitcoin address that Blockonomics can monitor.
+BLOCKONOMICS_XPUB="YOUR_BLOCKONOMICS_XPUB_OR_MONITORED_BTC_ADDRESS"
+
+# --- For Blockonomics BTC Withdrawal (Requires Self-Hosted Wallet Service) ---
+# To make REAL BTC withdrawals via Blockonomics API, you typically need to
+# run their self-hosted 'wallet_service' (https://github.com/blockonomics/wallet_service).
+# The URL below should point to YOUR deployed instance of that wallet_service.
+# This is NOT a public Blockonomics API for sending.
+BLOCKONOMICS_WALLET_SERVICE_URL="http://your-blockonomics-wallet-service-ip:port"
+BLOCKONOMICS_WALLET_ID="YOUR_BLOCKONOMICS_WALLET_SERVICE_WALLET_ID" # This is defined when you set up wallet_service
+BLOCKONOMICS_WALLET_PASSWORD="YOUR_BLOCKONOMICS_WALLET_SERVICE_PASSWORD" # Password for the wallet_service API itself
+BLOCKONOMICS_API_PASSWORD_FOR_SEND="YOUR_OPTIONAL_API_PASSWORD_FOR_WALLET_SERVICE_SEND_FUNCTION" # If you configured an API password specifically for sending within your wallet_service config
+
+# --- For Actual SOL to BTC Conversion Trigger (Transfer to Exchange) ---
+# This is the deposit address on a centralized exchange (e.g., Binance, Coinbase)
+# where you would send SOL to convert it to BTC.
+SOL_TO_BTC_EXCHANGE_DEPOSIT_ADDRESS="YOUR_EXCHANGE_SOL_DEPOSIT_ADDRESS_FOR_BTC_CONVERSION"
+
+
+# --- For Firebase/Firestore (Canvas provides these, but listing for completeness) ---
+# Note: Canvas runtime automatically injects __app_id, __firebase_config, __initial_auth_token
+# You typically DO NOT need to set these in your .env for Canvas deployments.
+# However, for local testing outside Canvas, you might need them.
+# __app_id="your-app-id"
+# __firebase_config='{"apiKey": "...", "authDomain": "...", "projectId": "...", "storageBucket": "...", "messagingSenderId": "...", "appId": "...", "measurementId": "..."}'
+# __initial_auth_token="your-firebase-auth-token"
+
+
+# Standard Port
+PORT="8080"
